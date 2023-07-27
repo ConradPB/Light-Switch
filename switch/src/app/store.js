@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { configureStore } from '@reduxjs/toolkit';
-
+import { useState, useEffect } from 'react';
 
 const toggle = () => {
   return {type: 'toggle'} 
@@ -37,6 +37,7 @@ store.subscribe(render); // Re-render in response to state changes.
 // Receive the store's state as a prop.
 function LightSwitch(props) {
   const state = props.state; 
+  const [clicked, setClicked] = useState(false);
 
   // We adjust the UI based on the store's current state.
   const bgColor = state === 'on' ? 'white' : 'black';
@@ -45,14 +46,22 @@ function LightSwitch(props) {
   // The click handler dispatches an action to the store.
   const handleLightSwitchClick = () => {
     store.dispatch(toggle());
+    
   }
+
+  useEffect(() => {
+    if (state === 'on') {
+      setClicked(true);
+    }
+  }, [state]);
  
   return (  
     <div style={{background : bgColor, color: textColor}}>
       <button onClick={handleLightSwitchClick}>
-        {state}
+        { !clicked ? 'Click here' : '' } {state}
       </button>
     </div>
   )
 }
  
+export { LightSwitch }
